@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kayo Andrade — Desenvolvedor Back-End & DevOps</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0c10;
+      --bg2:       #111318;
+      --bg3:       #181b22;
+      --border:    #1f2330;
+      --border2:   #2a2f3e;
+      --text:      #e2e4ea;
+      --muted:     #6b7280;
+      --accent:    #4ade80;
+      --accent2:   #22d3ee;
+      --accent3:   #f59e0b;
+      --danger:    #f87171;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GRID OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    section { padding: 6rem 0; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    #hero {
+      padding: 10rem 0 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name .line2 {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border2);
+    }
+
+    .hero-tagline {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    .hero-tagline .hl { color: var(--accent2); }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0c10;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover { background: #6ee7a0; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border2);
+    }
+
+    .btn-outline:hover { border-color: var(--muted); background: var(--bg3); }
+
+    /* Glow blob behind hero */
+    .hero-glow {
+      position: absolute;
+      top: -10%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    /* ── SOBRE ── */
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .sobre-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .sobre-text p strong { color: var(--text); }
+
+    .sobre-text p .hl-green { color: var(--accent); }
+    .sobre-text p .hl-blue  { color: var(--accent2); }
+
+    .sobre-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .stat-card.blue::before  { background: var(--accent2); }
+    .stat-card.amber::before { background: var(--accent3); }
+    .stat-card.red::before   { background: var(--danger); }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── STACK TÉCNICA ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stack-group {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+    }
+
+    .stack-group-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 0.3rem 0.7rem;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .tag:hover { border-color: var(--muted); }
+
+    .tag.green  { color: var(--accent);  border-color: rgba(74,222,128,0.25);  background: rgba(74,222,128,0.05); }
+    .tag.blue   { color: var(--accent2); border-color: rgba(34,211,238,0.25);  background: rgba(34,211,238,0.05); }
+    .tag.amber  { color: var(--accent3); border-color: rgba(245,158,11,0.25);  background: rgba(245,158,11,0.05); }
+    .tag.red    { color: var(--danger);  border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.05); }
+
+    /* ── EXPERIÊNCIA ── */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--border), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2.4rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-dot.muted { background: var(--border2); }
+
+    .timeline-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-role {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .timeline-period {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(74,222,128,0.08);
+      border: 1px solid rgba(74,222,128,0.2);
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    .timeline-period.past { color: var(--muted); background: transparent; border-color: var(--border); }
+
+    .timeline-company {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .timeline-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .timeline-items li {
+      font-size: 14px;
+      color: var(--muted);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .timeline-items li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .promo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent3);
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ── PROJETOS ── */
+    .projects-intro {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .project-card:hover { border-color: var(--border2); }
+
+    .project-sector {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+
+    .project-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      color: var(--muted);
+    }
+
+    .confidential-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .confidential-badge::before {
+      content: '🔒';
+      font-size: 10px;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent2);
+      text-decoration: none;
+      margin-top: 0.25rem;
+      transition: color 0.2s;
+    }
+
+    .project-link:hover { color: var(--text); }
+
+    /* ── CERTIFICAÇÕES ── */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+
+    .cert-card:hover { border-color: var(--border2); }
+
+    .cert-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .cert-icon.cisco   { background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); }
+    .cert-icon.dio     { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); }
+
+    .cert-body {}
+
+    .cert-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .cert-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── CONTATO ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg2);
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--border2);
+      background: var(--bg3);
+    }
+
+    .contact-link .link-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .contact-link .link-label {
+      color: var(--muted);
+      font-size: 11px;
+      margin-left: auto;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      .container { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .sobre-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .sobre-stats { grid-template-columns: 1fr 1fr; }
+      section { padding: 4rem 0; }
+      #hero { padding: 7rem 0 4rem; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-in {
+        opacity: 0;
+        transform: translateY(16px);
+        animation: fadeUp 0.6s ease forwards;
+      }
+      @keyframes fadeUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .delay-1 { animation-delay: 0.1s; }
+      .delay-2 { animation-delay: 0.2s; }
+      .delay-3 { animation-delay: 0.3s; }
+      .delay-4 { animation-delay: 0.4s; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-logo"><span>~/</span>kayo.dev</span>
+      <ul class="nav-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#experiencia">Experiência</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <p class="hero-eyebrow fade-in">disponível para novos projetos</p>
+      <h1 class="hero-name fade-in delay-1">
+        Kayo<br>
+        <span class="line2">Andrade</span>
+      </h1>
+      <p class="hero-tagline fade-in delay-2">
+        Desenvolvedor <span class="hl">Back-End</span> &amp; <span class="hl">DevOps</span> —
+        construindo APIs robustas, pipelines de dados e sistemas seguros para
+        setores <span class="hl">público</span> e <span class="hl">privado</span>.
+      </p>
+      <div class="hero-cta fade-in delay-3">
+        <a href="#contato" class="btn btn-primary">Falar comigo</a>
+        <a href="#experiencia" class="btn btn-outline">Ver trajetória</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// sobre</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="sobre-grid">
+        <div class="sobre-text">
+          <h2 class="section-title">Quem sou</h2>
+          <p>
+            Sou desenvolvedor de software com foco em <strong>back-end, mobile e infraestrutura</strong>.
+            Trabalho com sistemas customizados para clientes dos setores público e privado —
+            desde a arquitetura até o deploy em produção.
+          </p>
+          <p>
+            Tenho experiência com <span class="hl-green">PHP/Laravel</span>, <span class="hl-blue">Python</span>,
+            <span class="hl-green">Flutter/Dart</span> e ferramentas como <span class="hl-blue">Docker</span>, Redis e WebSockets.
+            Gosto de resolver problemas reais com código limpo e sistemas que escalam.
+          </p>
+          <p>
+            Formação em <strong>Direito pela UFPB</strong> e graduando em <strong>Engenharia de Software</strong>
+            — essa combinação me dá uma visão diferenciada em projetos de conformidade com <span class="hl-green">LGPD</span>
+            e segurança da informação.
+          </p>
+        </div>
+        <div class="sobre-stats">
+          <div class="stat-card">
+            <div class="stat-number">< 1</div>
+            <div class="stat-label">ano para ir de<br>Prog. II → Prog. V</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-number">4+</div>
+            <div class="stat-label">linguagens de<br>programação</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-number">6</div>
+            <div class="stat-label">certificações<br>técnicas</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-number">2x</div>
+            <div class="stat-label">formação acadêmica<br>(Direito + Eng. SW)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// stack técnica</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-group">
+          <div class="stack-group-title">Linguagens</div>
+          <div class="stack-tags">
+            <span class="tag green">PHP</span>
+            <span class="tag green">Python</span>
+            <span class="tag green">Dart</span>
+            <span class="tag green">JavaScript</span>
+            <span class="tag green">Java</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Frameworks</div>
+          <div class="stack-tags">
+            <span class="tag blue">Laravel</span>
+            <span class="tag blue">Flutter</span>
+            <span class="tag blue">FastAPI</span>
+            <span class="tag blue">Django</span>
+            <span class="tag blue">Node.js</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Bancos de Dados</div>
+          <div class="stack-tags">
+            <span class="tag amber">PostgreSQL</span>
+            <span class="tag amber">MySQL</span>
+            <span class="tag amber">MariaDB</span>
+            <span class="tag amber">MongoDB</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Infraestrutura & DevOps</div>
+          <div class="stack-tags">
+            <span class="tag red">Docker</span>
+            <span class="tag red">Redis</span>
+            <span class="tag red">WebSockets</span>
+            <span class="tag red">Git</span>
+            <span class="tag red">Postman</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Segurança & Conformidade</div>
+          <div class="stack-tags">
+            <span class="tag">Pentest (fundamentos)</span>
+            <span class="tag">LGPD</span>
+            <span class="tag">Networking Defense</span>
+            <span class="tag">Endpoint Security</span>
+            <span class="tag">APIs RESTful</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIÊNCIA -->
+  <section id="experiencia">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// experiência</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Programador V</div>
+              <div class="timeline-company">PBSoft · João Pessoa, PB</div>
+            </div>
+            <span class="timeline-period">02/2026 – Atual</span>
+          </div>
+          <ul class="timeline-items">
+            <li>Arquitetura e liderança técnica de projetos ponta a ponta — da concepção ao deploy em produção.</li>
+            <li>Ponto de contato técnico com clientes, traduzindo requisitos de negócio em soluções escaláveis.</li>
+            <li>Desenvolvimento de APIs RESTful integradas a serviços externos com foco em segurança e performance.</li>
+            <li>Comunicação em tempo real via WebSockets e gerenciamento de cache/filas com Redis.</li>
+            <li>Orquestração de ambientes com Docker garantindo consistência entre ciclos de deploy.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot muted"></div>
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Programador II</div>
+              <div class="timeline-company">PBSoft · João Pessoa, PB</div>
+            </div>
+            <span class="timeline-period past">05/2025 – 01/2026</span>
+          </div>
+          <div class="promo-badge">⚡ Promovido a Programador V em menos de 1 ano</div>
+          <ul class="timeline-items">
+            <li>Desenvolvimento de sistemas customizados para os setores público e privado.</li>
+            <li>Manutenção e evolução de sistema legado em PHP com estabilidade e alinhamento às demandas do negócio.</li>
+            <li>Projeto e implementação de APIs RESTful para integração com serviços externos.</li>
+            <li>Criação de ambientes Docker para padronização do ciclo de desenvolvimento.</li>
+            <li>Projetos de compliance digital e LGPD garantindo integridade e privacidade dos dados.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot muted"></div>
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Desenvolvedor</div>
+              <div class="timeline-company">Rede Facilité · João Pessoa, PB</div>
+            </div>
+            <span class="timeline-period past">07/2024 – 08/2024</span>
+          </div>
+          <ul class="timeline-items">
+            <li>Desenvolvimento e manutenção de aplicações web com PHP e Laravel.</li>
+            <li>Implementação de APIs RESTful e integração com serviços externos.</li>
+            <li>Containerização com Docker e testes de API com Postman.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot muted"></div>
+          <div class="timeline-header">
+            <div>
+              <div class="timeline-role">Estágio em Desenvolvimento Web</div>
+              <div class="timeline-company">Rede Facilité · João Pessoa, PB</div>
+            </div>
+            <span class="timeline-period past">03/2024 – 06/2024</span>
+          </div>
+          <ul class="timeline-items">
+            <li>Suporte ao desenvolvimento e implantação de projetos de software em equipe.</li>
+            <li>Auxílio na definição e manutenção de infraestrutura de servidores e bancos de dados.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETOS -->
+  <section id="projetos">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// projetos</span>
+        <span class="section-line"></span>
+      </div>
+      <p class="projects-intro">
+        A maioria dos sistemas que desenvolvi está sob contrato de confidencialidade.
+        O que posso mostrar é o <strong>tipo de problema</strong> que resolvo,
+        as <strong>decisões técnicas</strong> que tomo e as <strong>tecnologias</strong> que uso —
+        porque o impacto do trabalho importa mais que o código exposto.
+      </p>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div class="project-sector">Setor Público</div>
+          <div class="project-title">Sistema de Gestão Pública</div>
+          <div class="project-desc">
+            Sistema customizado de informação para órgão público.
+            Arquitetura back-end com Laravel, banco PostgreSQL,
+            containerização com Docker e integração com APIs externas.
+            Foco em estabilidade, conformidade com LGPD e auditoria de dados.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">Laravel</span>
+            <span class="project-tag">PostgreSQL</span>
+            <span class="project-tag">Docker</span>
+            <span class="project-tag">LGPD</span>
+          </div>
+          <div class="confidential-badge">Projeto confidencial</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Mobile / B2B</div>
+          <div class="project-title">Aplicativo Mobile Corporativo</div>
+          <div class="project-desc">
+            App Flutter/Dart integrado a uma API RESTful proprietária.
+            Implementação de comunicação em tempo real via WebSockets
+            e gerenciamento de estado offline-first para uso em campo.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">Flutter</span>
+            <span class="project-tag">Dart</span>
+            <span class="project-tag">WebSockets</span>
+            <span class="project-tag">REST API</span>
+          </div>
+          <div class="confidential-badge">Projeto confidencial</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Segurança / Compliance</div>
+          <div class="project-title">Plataforma de Compliance Digital</div>
+          <div class="project-desc">
+            Módulo de adequação à LGPD integrado a sistema legado PHP.
+            Controle de consentimento, mapeamento de dados pessoais
+            e geração de relatórios de conformidade. Background em Direito
+            aplicado diretamente à arquitetura do sistema.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">PHP</span>
+            <span class="project-tag">MySQL</span>
+            <span class="project-tag">LGPD</span>
+            <span class="project-tag">REST API</span>
+          </div>
+          <div class="confidential-badge">Projeto confidencial</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Infraestrutura / DevOps</div>
+          <div class="project-title">Pipeline de Deploy com Docker</div>
+          <div class="project-desc">
+            Padronização de ambientes de desenvolvimento e produção
+            usando Docker Compose. Implementação de Redis para cache e filas,
+            reduzindo latência e aumentando a resiliência dos serviços.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">Docker</span>
+            <span class="project-tag">Redis</span>
+            <span class="project-tag">Bash</span>
+            <span class="project-tag">Linux</span>
+          </div>
+          <div class="confidential-badge">Projeto confidencial</div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Python / Back-End</div>
+          <div class="project-title">Store API</div>
+          <div class="project-desc">
+            API RESTful construída com FastAPI seguindo TDD (Test-Driven Development).
+            Persistência com MongoDB, testes automatizados com pytest e
+            documentação automática via OpenAPI.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">FastAPI</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">MongoDB</span>
+            <span class="project-tag">pytest</span>
+            <span class="project-tag">TDD</span>
+          </div>
+          <a href="https://github.com/Kayocma/store_api" target="_blank" rel="noopener" class="project-link">↗ Ver no GitHub</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Python / DevOps</div>
+          <div class="project-title">Workout API</div>
+          <div class="project-desc">
+            API de gerenciamento de treinos desenvolvida com FastAPI, Python e Docker.
+            Containerização completa para garantir portabilidade e consistência
+            entre ambientes de desenvolvimento e produção.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">FastAPI</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Docker</span>
+          </div>
+          <a href="https://github.com/Kayocma/workout_api" target="_blank" rel="noopener" class="project-link">↗ Ver no GitHub</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-sector">Open Source / Git</div>
+          <div class="project-title">Contribuição Open Source</div>
+          <div class="project-desc">
+            Contribuição em projeto open source no GitHub como parte da
+            formação em versionamento de código. Prática de Git flow,
+            pull requests e colaboração em repositório público.
+          </div>
+          <div class="project-stack">
+            <span class="project-tag">Git</span>
+            <span class="project-tag">GitHub</span>
+            <span class="project-tag">Markdown</span>
+          </div>
+          <a href="https://github.com/Kayocma/dio-lab-open-source" target="_blank" rel="noopener" class="project-link">↗ Ver no GitHub</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICAÇÕES -->
+  <section id="certs">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// certificações</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="certs-grid">
+
+        <div class="cert-card">
+          <div class="cert-icon cisco">🌐</div>
+          <div class="cert-body">
+            <div class="cert-title">Networking Defense</div>
+            <div class="cert-meta">CISCO · 04/2025</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon cisco">🌐</div>
+          <div class="cert-body">
+            <div class="cert-title">Networking Technician Career Path</div>
+            <div class="cert-meta">CISCO · 04/2025</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon cisco">🔐</div>
+          <div class="cert-body">
+            <div class="cert-title">Endpoint Security</div>
+            <div class="cert-meta">CISCO · 09/2024</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon dio">⚡</div>
+          <div class="cert-body">
+            <div class="cert-title">Princípios de Enumeração e Exploração de Vulnerabilidades</div>
+            <div class="cert-meta">DIO · 12/2024</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon dio">⚡</div>
+          <div class="cert-body">
+            <div class="cert-title">Fundamentos de Testes de Invasão (Pentest)</div>
+            <div class="cert-meta">DIO · 12/2024</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon dio">🐍</div>
+          <div class="cert-body">
+            <div class="cert-title">Python AI Backend Developer</div>
+            <div class="cert-meta">DIO · 07/2024</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon cisco">🌐</div>
+          <div class="cert-body">
+            <div class="cert-title">Networking Academy Learn-A-Thon 2025</div>
+            <div class="cert-meta">CISCO · 03/2025</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon cisco">🌐</div>
+          <div class="cert-body">
+            <div class="cert-title">Networking Basics</div>
+            <div class="cert-meta">CISCO · 10/2024</div>
+          </div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-icon dio">🛡️</div>
+          <div class="cert-body">
+            <div class="cert-title">Formação Cybersecurity Specialist</div>
+            <div class="cert-meta">DIO · 2024</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">// contato</span>
+        <span class="section-line"></span>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-text">
+          <h2 class="section-title">Vamos conversar</h2>
+          <p>
+            Estou aberto a oportunidades CLT, projetos freelancer e consultorias
+            em desenvolvimento back-end, integrações de API, DevOps ou segurança da informação.
+          </p>
+          <p>
+            Fique à vontade para entrar em contato por qualquer canal abaixo.
+            Respondo rápido.
+          </p>
+          <a href="mailto:kayocezarma@gmail.com" class="btn btn-primary" style="width:fit-content;">
+            Enviar e-mail →
+          </a>
+        </div>
+        <div class="contact-links">
+          <a href="mailto:kayocezarma@gmail.com" class="contact-link">
+            <span class="link-icon">✉</span>
+            kayocezarma@gmail.com
+            <span class="link-label">e-mail</span>
+          </a>
+          <a href="https://www.linkedin.com/in/kayo-c%C3%A9zar-787501291/" target="_blank" rel="noopener" class="contact-link">
+            <span class="link-icon">in</span>
+            linkedin.com/in/kayo-cézar
+            <span class="link-label">LinkedIn</span>
+          </a>
+          <a href="https://github.com/Kayocma" target="_blank" rel="noopener" class="contact-link">
+            <span class="link-icon">⌥</span>
+            github.com/Kayocma
+            <span class="link-label">GitHub</span>
+          </a>
+          <a href="tel:+5583996167221" class="contact-link">
+            <span class="link-icon">☏</span>
+            (83) 9 9616-7221
+            <span class="link-label">telefone</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2026 Kayo Andrade — João Pessoa, PB</span>
+        <span class="footer-status">
+          <span class="status-dot"></span>
+          disponível para projetos
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
